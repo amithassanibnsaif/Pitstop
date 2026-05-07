@@ -4,12 +4,20 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Flame, Menu as MenuIcon, X, Globe } from 'lucide-react';
 import { tData, Language } from './i18n';
 import Logo from './Logo';
+import { APIProvider } from '@vis.gl/react-google-maps';
 
 import HomePage from './pages/HomePage';
 import MenuPage from './pages/MenuPage';
 import StoryPage from './pages/StoryPage';
 import LocationPage from './pages/LocationPage';
 import OrderPage from './pages/OrderPage';
+
+const API_KEY =
+  process.env.GOOGLE_MAPS_PLATFORM_KEY ||
+  (import.meta as any).env?.VITE_GOOGLE_MAPS_PLATFORM_KEY ||
+  (globalThis as any).GOOGLE_MAPS_PLATFORM_KEY ||
+  '';
+const hasValidKey = Boolean(API_KEY) && API_KEY !== 'YOUR_API_KEY' && API_KEY !== 'YOUR_GOOGLE_MAPS_API_KEY';
 
 export const PrimaryButton = ({ children, className = '', onClick }: any) => (
   <button
@@ -197,9 +205,30 @@ function AppContent() {
 }
 
 export default function App() {
+  if (!hasValidKey) {
+    return (
+      <div style={{display:'flex',alignItems:'center',justifyContent:'center',height:'100vh',fontFamily:'sans-serif', backgroundColor: '#F1ECE4'}}>
+        <div style={{textAlign:'center',maxWidth:520}}>
+          <h2>Google Maps API Key Required</h2>
+          <p><strong>Step 1:</strong> <a href="https://console.cloud.google.com/google/maps-apis/start" target="_blank" rel="noopener">Get an API Key</a></p>
+          <p><strong>Step 2:</strong> Add your key as a secret in AI Studio:</p>
+          <ul style={{textAlign:'left',lineHeight:'1.8'}}>
+            <li>Open <strong>Settings</strong> (⚙️ gear icon, <strong>top-right corner</strong>)</li>
+            <li>Select <strong>Secrets</strong></li>
+            <li>Type <code>GOOGLE_MAPS_PLATFORM_KEY</code> as the secret name, press <strong>Enter</strong></li>
+            <li>Paste your API key as the value, press <strong>Enter</strong></li>
+          </ul>
+          <p>The app rebuilds automatically after you add the secret.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <BrowserRouter>
-      <AppContent />
-    </BrowserRouter>
+    <APIProvider apiKey={API_KEY} version="weekly">
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
+    </APIProvider>
   );
 }

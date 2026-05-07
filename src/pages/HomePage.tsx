@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { PrimaryButton, OutlineButton } from '../App';
 import Logo from '../Logo';
 import { AnimatePresence } from 'motion/react';
+import ReviewsSection from '../components/ReviewsSection';
 
 const BackgroundSlider = () => {
   const [index, setIndex] = React.useState(0);
@@ -152,6 +153,10 @@ export default function HomePage({ lang, t }: { lang: any, t: any }) {
           </div>
         </div>
       </section>
+
+      {/* Reviews Section from Google Maps */}
+      <ReviewsSection t={t} />
+      
     </motion.div>
   );
 }
