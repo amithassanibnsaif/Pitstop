@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Flame, Menu as MenuIcon, X, Globe } from 'lucide-react';
+import { Analytics } from '@vercel/analytics/react';
 import { tData, Language } from './i18n';
 import Logo from './Logo';
 
@@ -200,6 +201,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <AppContent />
+      <Analytics />
     </BrowserRouter>
   );
 }
